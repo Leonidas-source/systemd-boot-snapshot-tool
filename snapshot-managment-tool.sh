@@ -180,7 +180,7 @@ modify_boot_with_own_name() {
   echo "initrd /$name_for_snapshot/$third_line" | cat >> $name_for_snapshot.conf
   cat $name | grep options | cat >> $name_for_snapshot.conf
   cat $name_for_snapshot.conf | grep subvol && sed -i "s|rootflags=subvol=/$answr3|rootflags=subvol=/$name_for_snapshot|" $name_for_snapshot.conf
-  cat $name_for_snapshot.conf | grep subvol || sed -i "s|rw|rw rootflags=subvol=/$time|" $name_for_snapshot.conf
+  cat $name_for_snapshot.conf | grep subvol || sed -i "s|rw|rw rootflags=subvol=/$name_for_snapshot|" $name_for_snapshot.conf
   cd /boot
   mkdir $name_for_snapshot
   modify_boot_with_own_name_part_one
