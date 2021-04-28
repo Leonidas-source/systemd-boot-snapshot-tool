@@ -99,7 +99,8 @@ error() {
   exit
 }
 user_check() {
-  [ whoami != root ] && error
+  user_name=$(whoami)
+  [ "$user_name" == root ] || error
 }
 setup() {
   lsblk -f
