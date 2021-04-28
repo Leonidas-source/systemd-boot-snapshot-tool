@@ -99,7 +99,7 @@ error() {
   exit
 }
 user_check() {
-  [ `/usr/bin/whoami` != root ] && error
+  [ whoami != root ] && error
 }
 setup() {
   lsblk -f
