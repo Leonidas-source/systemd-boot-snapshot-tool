@@ -21,7 +21,7 @@ set_name() {
 }
 menu() {
   timeout=$(cat /boot/loader/loader.conf | grep timeout | sed "s/timeout //")
-  #clear
+  clear
   echo -e "your current bootloader timeout is ${red}${bold}$timeout${reset} seconds
 
 
