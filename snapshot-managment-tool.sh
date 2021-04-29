@@ -198,6 +198,7 @@ modify_boot_with_own_name_part_three() {
   cd $source
 }
 user_check
+find folder || mkdir folder
 ls | grep -w "config" || setup
 ls | grep -w "config" && (cat config | grep -w "DONE" || fix_loader)
 partition=$(cat config | grep /dev/)
