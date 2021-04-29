@@ -16,31 +16,12 @@ own_value() {
   read -e name
 }
 set_name() {
-  answr3=$(echo "$answr2" | sed 's|/||')
   ls | grep $answr3 && name=$answr3.conf
   ls | grep $answr3 || own_value
 }
-check_for_another_folder() {
-  ls | grep -w "$answr3" && another_function
-  ls | grep -w "$answr3" || right_function
-}
-another_function() {
-  cd /boot/$answr3
-  cp -v * /boot/$time
-  cd $source
-  ls | grep $time && rm -rv $time
-}
-right_function() {
-  init=$(ls | grep initramfs | sed -n '2p')
-  cp -v $init $time
-  kernel=$(ls | grep vmlinuz)
-  cp -v $kernel $time
-  cd $source
-  ls | grep $time && rm -rv $time
-}
 menu() {
   timeout=$(cat /boot/loader/loader.conf | grep timeout | sed "s/timeout //")
-  clear
+  #clear
   echo -e "your current bootloader timeout is ${red}${bold}$timeout${reset} seconds
 
 
@@ -140,6 +121,7 @@ name() {
   modify_boot_with_own_name
 }
 modify_boot() {
+  answr3=$(echo "$answr2" | sed 's|/||')
   source=$(pwd)
   cd /boot/loader/entries/
   count_all_configs=$(ls | wc -l)
@@ -162,7 +144,22 @@ modify_boot() {
   mkdir $time
   check_for_another_folder
 }
+check_for_another_folder() {
+  find "$answr3" && another_function
+  find "$answr3" || right_function
+  cd $source
+}
+another_function() {
+  cp /boot/$answr3/*  /boot/$time/
+}
+right_function() {
+  init=$(ls | grep initramfs | sed -n '2p')
+  cp -v $init $time
+  kernel=$(ls | grep vmlinuz)
+  cp -v $kernel $time
+}
 modify_boot_with_own_name() {
+  answr3=$(echo "$answr2" | sed 's|/||')
   source=$(pwd)
   cd /boot/loader/entries/
   count_all_configs=$(ls | wc -l)
