@@ -19,9 +19,15 @@ set_name() {
   ls | grep $answr3 && name=$answr3.conf
   ls | grep $answr3 || own_value
 }
+check_id() {
+  [ "$default_subvolume" == "ID 5 (FS_TREE)" ] || warning_message="WARNING: YOUR FILESYSTEM DEFAULT SUBVOLUME IS NOT CORRECT. PLEASE SET YOUR DEFAULT SUBVOLUME ID TO 5"
+}
 menu() {
+  default_subvolume=$(btrfs subvolume get-default folder)
+  check_id
   timeout=$(cat /boot/loader/loader.conf | grep timeout | sed "s/timeout //")
   clear
+  echo -e "${red}${bold}$warning_message${reset}"
   echo -e "your current bootloader timeout is ${red}${bold}$timeout${reset} seconds
 
 
