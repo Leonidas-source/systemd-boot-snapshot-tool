@@ -26,7 +26,6 @@ menu() {
   default_subvolume=$(btrfs subvolume get-default folder)
   check_id
   timeout=$(cat /boot/loader/loader.conf | grep timeout | sed "s/timeout //")
-  clear
   echo -e "${red}${bold}$warning_message${reset}"
   echo -e "your current bootloader timeout is ${red}${bold}$timeout${reset} seconds
 
@@ -149,10 +148,19 @@ modify_boot() {
   cd /boot
   mkdir $time
   check_for_another_folder
+  replace_old_kernel_path_for_time
+}
+replace_old_kernel_path_for_time() {
   grep /boot/vmlinuz folder/$time/usr/share/libalpm/scripts/mkinitcpio-install || sed -i "s|/boot/$answr2/*|/boot/$time/|" folder/$time/usr/share/libalpm/scripts/mkinitcpio-install
   grep /boot/vmlinuz folder/$time/usr/share/libalpm/scripts/mkinitcpio-install && sed -i "s|/boot/*|/boot/$time/|" folder/$time/usr/share/libalpm/scripts/mkinitcpio-install
   grep /boot/vmlinuz folder/$time/usr/share/libalpm/scripts/mkinitcpio-remove || sed -i "s|/boot/$answr2/*|/boot/$time/|" folder/$time/usr/share/libalpm/scripts/mkinitcpio-remove
   grep /boot/vmlinuz folder/$time/usr/share/libalpm/scripts/mkinitcpio-remove && sed -i "s|/boot/*|/boot/$time/|" folder/$time/usr/share/libalpm/scripts/mkinitcpio-remove
+  og_path=$(pwd)
+  cd folder/$time/etc/mkinitcpio.d/
+  kernel=$(ls | grep linux)
+  grep $answr3 $kernel || sed -i "s|/boot/*|/boot/$time/|" $kernel
+  grep $answr3 $kernel && sed -i "s|/boot/$answr3/|/boot/$time/|" $kernel
+  cd $og_path
 }
 check_for_another_folder() {
   find "$answr3" && another_function
@@ -191,10 +199,19 @@ modify_boot_with_own_name() {
   cd /boot
   mkdir $name_for_snapshot
   modify_boot_with_own_name_part_one
+  replace_old_kernel_path_for_own_name
+}
+replace_old_kernel_path_for_own_name() {
   grep /boot/vmlinuz folder/$name_for_snapshot/usr/share/libalpm/scripts/mkinitcpio-install || sed -i "s|/boot/$answr2/*|/boot/$name_for_snapshot/|" folder/$name_for_snapshot/usr/share/libalpm/scripts/mkinitcpio-install
   grep /boot/vmlinuz folder/$name_for_snapshot/usr/share/libalpm/scripts/mkinitcpio-install && sed -i "s|/boot/*|/boot/$name_for_snapshot/|" folder/$name_for_snapshot/usr/share/libalpm/scripts/mkinitcpio-install
   grep /boot/vmlinuz folder/$name_for_snapshot/usr/share/libalpm/scripts/mkinitcpio-remove || sed -i "s|/boot/$answr2/*|/boot/$name_for_snapshot/|" folder/$name_for_snapshot/usr/share/libalpm/scripts/mkinitcpio-remove
   grep /boot/vmlinuz folder/$name_for_snapshot/usr/share/libalpm/scripts/mkinitcpio-remove && sed -i "s|/boot/*|/boot/$name_for_snapshot/|" folder/$name_for_snapshot/usr/share/libalpm/scripts/mkinitcpio-remove
+  og_path=$(pwd)
+  cd folder/$name_for_snapshot/etc/mkinitcpio.d/
+  kernel=$(ls | grep linux)
+  grep $answr3 $kernel || sed -i "s|/boot/*|/boot/$name_for_snapshot/|" $kernel
+  grep $answr3 $kernel && sed -i "s|/boot/$answr3/|/boot/$name_for_snapshot/|" $kernel
+  cd $og_path
 }
 modify_boot_with_own_name_part_one() {
   ls | grep -w "$answr3" && modify_boot_with_own_name_part_two
@@ -214,7 +231,6 @@ modify_boot_with_own_name_part_three() {
 user_check
 find folder || mkdir folder
 ls | grep -w "config" || setup
-ls | grep -w "config" && (cat config | grep -w "DONE" || fix_loader)
 partition=$(cat config | grep /dev/)
 mount -o subvolid=5 $partition folder
 menu
