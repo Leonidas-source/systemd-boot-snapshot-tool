@@ -149,8 +149,10 @@ modify_boot() {
   cd /boot
   mkdir $time
   check_for_another_folder
-  sed -i "s|/boot/*|/boot/$time/|" folder/$time/usr/share/libalpm/scripts/mkinitcpio-install
-  sed -i "s|/boot/*|/boot/$time/|" folder/$time/usr/share/libalpm/scripts/mkinitcpio-remove
+  grep /boot/vmlinuz folder/$time/usr/share/libalpm/scripts/mkinitcpio-install || sed -i "s|/boot/$answr2/*|/boot/$time/|" folder/$time/usr/share/libalpm/scripts/mkinitcpio-install
+  grep /boot/vmlinuz folder/$time/usr/share/libalpm/scripts/mkinitcpio-install && sed -i "s|/boot/*|/boot/$time/|" folder/$time/usr/share/libalpm/scripts/mkinitcpio-install
+  grep /boot/vmlinuz folder/$time/usr/share/libalpm/scripts/mkinitcpio-remove || sed -i "s|/boot/$answr2/*|/boot/$time/|" folder/$time/usr/share/libalpm/scripts/mkinitcpio-remove
+  grep /boot/vmlinuz folder/$time/usr/share/libalpm/scripts/mkinitcpio-remove && sed -i "s|/boot/*|/boot/$time/|" folder/$time/usr/share/libalpm/scripts/mkinitcpio-remove
 }
 check_for_another_folder() {
   find "$answr3" && another_function
@@ -189,8 +191,10 @@ modify_boot_with_own_name() {
   cd /boot
   mkdir $name_for_snapshot
   modify_boot_with_own_name_part_one
-  sed -i "s|/boot/*|/boot/$name_for_snapshot/|" folder/$name_for_snapshot/usr/share/libalpm/scripts/mkinitcpio-install
-  sed -i "s|/boot/*|/boot/$name_for_snapshot/|" folder/$name_for_snapshot/usr/share/libalpm/scripts/mkinitcpio-remove
+  grep /boot/vmlinuz folder/$name_for_snapshot/usr/share/libalpm/scripts/mkinitcpio-install || sed -i "s|/boot/$answr2/*|/boot/$name_for_snapshot/|" folder/$name_for_snapshot/usr/share/libalpm/scripts/mkinitcpio-install
+  grep /boot/vmlinuz folder/$name_for_snapshot/usr/share/libalpm/scripts/mkinitcpio-install && sed -i "s|/boot/*|/boot/$name_for_snapshot/|" folder/$name_for_snapshot/usr/share/libalpm/scripts/mkinitcpio-install
+  grep /boot/vmlinuz folder/$name_for_snapshot/usr/share/libalpm/scripts/mkinitcpio-remove || sed -i "s|/boot/$answr2/*|/boot/$name_for_snapshot/|" folder/$name_for_snapshot/usr/share/libalpm/scripts/mkinitcpio-remove
+  grep /boot/vmlinuz folder/$name_for_snapshot/usr/share/libalpm/scripts/mkinitcpio-remove && sed -i "s|/boot/*|/boot/$name_for_snapshot/|" folder/$name_for_snapshot/usr/share/libalpm/scripts/mkinitcpio-remove
 }
 modify_boot_with_own_name_part_one() {
   ls | grep -w "$answr3" && modify_boot_with_own_name_part_two
