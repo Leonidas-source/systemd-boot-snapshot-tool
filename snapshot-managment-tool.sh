@@ -26,6 +26,7 @@ menu() {
   default_subvolume=$(btrfs subvolume get-default folder)
   check_id
   timeout=$(cat /boot/loader/loader.conf | grep timeout | sed "s/timeout //")
+  clear
   echo -e "${red}${bold}$warning_message${reset}"
   echo -e "your current bootloader timeout is ${red}${bold}$timeout${reset} seconds
 
