@@ -50,6 +50,7 @@ menu() {
     [ "$answr3" == "2" ] && delete
     [ "$answr3" == "3" ] && change_timeout
     [ "$answr3" == "4" ] && quit
+    [ "$answr3" == "" ] && quit
 }
 change_timeout() {
   clear
